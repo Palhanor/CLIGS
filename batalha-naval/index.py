@@ -17,61 +17,28 @@ barcos = [3, 3, 2, 2]
 pontos_impacto = sum(barcos)
 letras_linhas = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J')
 
+
+def gerador_matriz():
+    linhas = []
+    colunas = []
+    for j in range(0, 10):
+        colunas.append(0)
+    for i in range(0, 10):
+        linhas.append(colunas[:])
+    return linhas[:]
+
+
 # Variaveis jogador
 acertos_jogador = 0
 num_tentativas_jogador = 0
-casas_jogador = [
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False]
-]
-tentativas_jogador = [
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False]
-]
+casas_jogador = gerador_matriz()
+tentativas_jogador = gerador_matriz()
 
 # Variaveis computador
 acertos_computador = 0
 num_tentativas_computador = 0
-casas_computador = [
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False]
-]
-tentativas_computador = [
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False],
-    [False, False, False, False, False, False, False, False, False, False]
-]
+casas_computador = gerador_matriz()
+tentativas_computador = gerador_matriz()
 
 
 def pega_letra_linha(num):
@@ -210,6 +177,18 @@ def jogada_computador():
     turno_jogador = True
 
 
+def finalizar():
+    global reiniciar
+    sair = input('Deseja sair do jogo? ')
+    if sair.upper() == 'S':
+        reiniciar = False
+        comando('cls')
+        comando('C:\\Users\\Computador\\Desktop\\CLIGS\\index.py')
+    else:
+        comando('cls')
+        comando('C:\\Users\\Computador\\Desktop\\CLIGS\\batalha-naval\\index.py')
+
+
 while reiniciar:
     posiciona_barcos(casas_computador)
     posiciona_barcos(casas_jogador)
@@ -219,11 +198,4 @@ while reiniciar:
             jogada_jogador()
         else:
             jogada_computador()
-    sair = input('Deseja sair do jogo? ')
-    if sair.upper() == 'S':
-        reiniciar = False
-        comando('cls')
-        comando('C:\\Users\\Computador\\Desktop\\CLIGS\\index.py')
-    else:
-        comando('cls')
-        comando('C:\\Users\\Computador\\Desktop\\CLIGS\\batalha-naval\\index.py')
+    finalizar()
