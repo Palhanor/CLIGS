@@ -4,8 +4,6 @@
 # 2 => VAZIO ATACADO
 # 3 => BARCO ATACADO
 
-# TODO: Continuar a modularização
-
 import random
 import os
 
@@ -13,6 +11,8 @@ comando = os.system
 letras_linhas = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J')
 barcos = (3, 3, 2, 2)
 pontos_impacto = sum(barcos)
+
+# FUNCIONALIDADES
 
 
 def gerador_matriz():
@@ -92,19 +92,21 @@ def entrada_jogador():
             return valor_linha, valor_coluna
 
 
-def cabecalho(mensagem):
-    print('\n   ----------------------------')
-    print(f'         {mensagem}       ')
-    print('   ----------------------------\n')
-    print('   ', end='')
-    for contador in range(0, 10):
-        print(f' {contador} ', end="")
-        contador += 1
-    print('')
-
-
-def limpar_tela():
-    comando('cls' if os.name == 'nt' else 'clear')
+def jogada(jogando, turno, player):
+    player['num_tentativas'] += 1
+    [linha, coluna] = entrada_jogador() if turno else ataque_computador()
+    if player['casas'][linha][coluna]:
+        player['tentativas'][linha][coluna] = True
+        player['acertos'] += 1
+        if player['acertos'] == pontos_impacto:
+            jogando = False
+            # renderiza_tela()
+            print(f'\nParabens, voce VENCEU com {player["num_tentativas"]} tentativas!!!') if turno \
+                else print(f'\nQue pena, voce PERDEU com {player["num_tentativas"]} tentativas do computador...')
+    else:
+        player['tentativas'][linha][coluna] = True
+    turno = not turno
+    return jogando, turno, player
 
 
 def finalizar():
@@ -116,3 +118,44 @@ def finalizar():
         limpar_tela()
         comando('.\\batalha-naval\\index.py')
 
+
+# DESENHO DE TELA
+
+
+def cabecalho(mensagem):
+    print('\n   ----------------------------')
+    print(f'         {mensagem}       ')
+    print('   ----------------------------\n')
+    print('   ', end='')
+    for contador in range(0, 10):
+        print(f' {contador} ', end="")
+        contador += 1
+    print('')
+
+
+def campo(mensagem, casas, tentativas, exibir_barcos=False):
+    cabecalho(f'{mensagem}')
+    for linha_matriz in range(0, len(casas)):
+        print(f' {pega_letra_linha(linha_matriz)} ', end='')
+        for coluna_matriz in range(0, len(casas[linha_matriz])):
+            if tentativas[linha_matriz][coluna_matriz] and not casas[linha_matriz][coluna_matriz]:
+                print('\033[1;31;44m X \033[m', end="")
+            elif tentativas[linha_matriz][coluna_matriz] and casas[linha_matriz][coluna_matriz]:
+                print('\033[7;31m x \033[m', end="")
+            elif exibir_barcos and casas[linha_matriz][coluna_matriz]:
+                print('\033[47m   \033[m', end="")
+            else:
+                print('\033[0;30;44m   \033[m', end="")
+        print('')
+
+
+def renderiza_tela(jogador, computador):
+    limpar_tela()
+    print(f'\nPLAYER: {jogador["acertos"]}')
+    print(f'COMPUTADOR: {computador["acertos"]}')
+    campo('CAMPO DO PLAYER', computador['casas'], computador['tentativas'], True)
+    campo('CAMPO DO COMPUTADOR', jogador['casas'], jogador['tentativas'])
+
+
+def limpar_tela():
+    comando('cls' if os.name == 'nt' else 'clear')
