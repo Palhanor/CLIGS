@@ -1,5 +1,4 @@
-# TODO: Criar um sistema de inicialização de variáveis
-from bn import gerador_matriz, posiciona_barcos, renderiza_tela, jogada, finalizar
+from utils_batalha_naval import gerador_matriz, posiciona_barcos, renderiza_tela, jogada, finalizar
 
 jogador = {
     'casas': gerador_matriz(),

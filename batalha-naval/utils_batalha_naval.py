@@ -4,8 +4,8 @@
 # 2 => VAZIO ATACADO
 # 3 => BARCO ATACADO
 
-import random
 import os
+import random
 
 comando = os.system
 letras_linhas = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J')
@@ -16,10 +16,6 @@ pontos_impacto = sum(barcos)
 
 
 def gerador_matriz():
-    """
-    Formata uma amtriz 10 por 10 para ser usada como tabuleiro
-    :return: Matriz 10 por 10 com valroes 0
-    """
     linhas = []
     colunas = []
     for j in range(0, 10):
@@ -30,18 +26,10 @@ def gerador_matriz():
 
 
 def pega_letra_linha(num):
-    """
-    :param num: Número da linha da matriz
-    :return: Letra respectiva da linha da matriz indicada
-    """
     return letras_linhas[num]
 
 
 def pega_numero_linha(char):
-    """
-    :param char: Letra da linha da matriz
-    :return: Número respectivo das linha da matriz indicada
-    """
     return letras_linhas.index(char.upper())
 
 
@@ -74,7 +62,8 @@ def entrada_jogador():
     while True:
         valores = input('\nInsira o ponto da matriz: ')
         if len(valores) != 2:
-            print('\033[31m O valor deve conter apenas dois digitos, o primeiro referente à linha e o segundo à coluna \033[m')
+            print('\033[31m O valor deve conter apenas dois digitos, '
+                  'o primeiro referente à linha e o segundo à coluna \033[m')
             continue
         elif valores[0].isdigit():
             print('\033[31m O primeiro valor deve ser uma letra referente à linha a ser selecionada \033[m')
@@ -98,9 +87,10 @@ def jogada(jogando, turno, player):
     if player['casas'][linha][coluna]:
         player['tentativas'][linha][coluna] = True
         player['acertos'] += 1
+        # TODO: Imedir que seja considerado um ponto acertado duas vezes
         if player['acertos'] == pontos_impacto:
             jogando = False
-            # renderiza_tela()
+            # renderiza_tela(jogador, computador)
             print(f'\nParabens, voce VENCEU com {player["num_tentativas"]} tentativas!!!') if turno \
                 else print(f'\nQue pena, voce PERDEU com {player["num_tentativas"]} tentativas do computador...')
     else:
@@ -110,7 +100,7 @@ def jogada(jogando, turno, player):
 
 
 def finalizar():
-    sair = input('Deseja sair do jogo? ')
+    sair = input('Deseja sair do jogo? (S/N) ')
     if sair.upper() == 'S':
         limpar_tela()
         comando('index.py')
@@ -133,6 +123,13 @@ def cabecalho(mensagem):
     print('')
 
 
+def placar(acertos_jogador, acertos_computador):
+    print('\n   ============================')
+    print(f'   ||  PLAYER: {acertos_jogador}             ||')
+    print(f'   ||  COMPUTADOR: {acertos_computador}         ||')
+    print('   ============================')
+
+
 def campo(mensagem, casas, tentativas, exibir_barcos=False):
     cabecalho(f'{mensagem}')
     for linha_matriz in range(0, len(casas)):
@@ -151,8 +148,7 @@ def campo(mensagem, casas, tentativas, exibir_barcos=False):
 
 def renderiza_tela(jogador, computador):
     limpar_tela()
-    print(f'\nPLAYER: {jogador["acertos"]}')
-    print(f'COMPUTADOR: {computador["acertos"]}')
+    placar(jogador['acertos'], computador['acertos'])
     campo('CAMPO DO PLAYER', computador['casas'], computador['tentativas'], True)
     campo('CAMPO DO COMPUTADOR', jogador['casas'], jogador['tentativas'])
 
