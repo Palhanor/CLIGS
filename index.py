@@ -12,7 +12,7 @@ selecionado = input('Qual você deseja jogar? ')
 
 if selecionado == '1':
     os.system('cls')
-    os.system('C:\\Users\\Computador\\Desktop\\CLIGS\\batalha-naval\\index.py')
+    os.system('.\\batalha-naval\\index.py')
 else:
     print('Lamentamos, mas este jogo está indisponível no momento...')
 
